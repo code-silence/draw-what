@@ -1,40 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SketchGuess</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="room-selection">
-        <h2>Enter SketchGuess</h2>
-        <input type="text" id="usernameInput" placeholder="Enter Username">
-        <input type="text" id="roomInput" placeholder="Enter Room Code (e.g., room1)">
-        <button id="joinBtn">Join Room</button>
-    </div>
 
-    <div id="game-container" style="display: none;">
-        <div class="canvas-area">
-            <h3 id="role-display">Waiting for game...</h3>
-            <canvas id="paintCanvas" width="600" height="400"></canvas>
-            <div class="controls">
-                <button id="clearBtn">Clear Canvas</button>
-            </div>
-        </div>
+<h1>SketchGuess</h1>
 
-        <div class="sidebar">
-            <div id="guess-log"></div>
-            <div class="input-area">
-                <input type="text" id="guessInput" placeholder="Type your guess...">
-                <button id="sendBtn">Send</button>
-            </div>
-        </div>
-    </div>
+<input
+    id="nameInput"
+    placeholder="Your name"
+>
 
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    
-    <script src="app.js"></script>
+<button id="continueBtn">
+    Continue
+</button>
+
+<script>
+
+document
+.getElementById("continueBtn")
+.addEventListener("click", () => {
+
+    const name =
+        document
+        .getElementById("nameInput")
+        .value;
+
+    localStorage.setItem(
+        "playerName",
+        name
+    );
+
+    location.href =
+        "lobby.html";
+});
+
+</script>
+
 </body>
 </html>
