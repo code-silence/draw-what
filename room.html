@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SketchGuess - Room</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- HEADER -->
+    <header>
+      <h1>SketchGuess</h1>
+      <h3 id="roomCode">Room: ----</h3>
+    </header>
+
+    <hr>
+
+    <!-- WAITING LOBBY -->
+    <section id="lobbySection">
+
+      <h2>Players</h2>
+
+      <ul id="playerList"></ul>
+
+      <button id="startBtn" style="display:none;">
+        Start Game
+      </button>
+
+    </section>
+
+    <hr>
+
+    <!-- GAME SECTION (hidden initially) -->
+    <section id="gameSection" style="display:none;">
+
+      <h2 id="status">Waiting for game...</h2>
+
+      <div id="wordBox">
+        <!-- drawer only sees word later -->
+      </div>
+
+      <canvas id="canvas"></canvas>
+
+      <div id="chatBox">
+        <!-- guessing UI later -->
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="js/room.js"></script>
+  <script type="module" src="js/canvas.js"></script>
+
+</body>
+
+</html>
