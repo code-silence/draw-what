@@ -66,12 +66,13 @@ onSnapshot(roomRef, (snap) => {
 
     // ===== GAME STATE CONTROL =====
     if (data.state === "drawing") {
-
+        guessInput.disabled = false;
+        guessBtn.disabled = false;
+        guessInput.value = "";
         resultSection.style.display = "none";
         lobbySection.style.display = "none";
         gameSection.style.display = "block";
-        guessInput.disabled = false;
-        guessBtn.disabled = false;
+        
         if (data.currentDrawer === playerName) {
 
             guessInput.style.display = "none";
@@ -90,7 +91,7 @@ onSnapshot(roomRef, (snap) => {
                 : `${data.currentDrawer} is drawing`;
 
         // ⏱ TIMER LOGIC
-        if (data.gameStartTime && !timerInterval) {
+        if (data.state === "drawing" && data.gameStartTime && !timerInterval) {
             const startTime = data.gameStartTime;
             const duration = 60 * 1000; // 60 seconds
 
@@ -159,6 +160,16 @@ onSnapshot(roomRef, (snap) => {
 
 });
 
+//get a random word from the words array
+function getRandomWord() {
+
+    return words[
+        Math.floor(
+            Math.random() * words.length
+        )
+    ];
+
+}
 
 // ===== START GAME =====
 startBtn.addEventListener("click", async () => {
@@ -187,7 +198,7 @@ startBtn.addEventListener("click", async () => {
         currentDrawerIndex: 0,
         players: shuffled,
         currentDrawer: shuffled[0].name,
-        currentWord: words[Math.floor(Math.random() * words.length)],
+        currentWord: getRandomWord(),
         guesses: [],
 
         // ⏱ ADD THIS
@@ -212,7 +223,7 @@ nextRoundBtn.addEventListener("click", async () => {
         state: "drawing",
         currentDrawerIndex: nextIndex,
         currentDrawer: data.players[nextIndex].name,
-        currentWord: "Dog", // temporary
+        currentWord: getRandomWord(),
         guesses: [],
         gameStartTime: Date.now()
     });

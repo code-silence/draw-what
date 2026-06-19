@@ -30,6 +30,13 @@ onSnapshot(roomRef, (snap) => {
     if (!snap.exists()) return;
 
     const data = snap.data();
+    
+    if (data.state === "drawing" && data.gameStartTime) {
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 
     // ONLY DRAWER CAN DRAW
     canDraw = String(data.currentDrawer) === String(playerName);
