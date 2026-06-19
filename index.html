@@ -1,42 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>SketchGuess</title>
 </head>
+
 <body>
 
-<h1>SketchGuess</h1>
+    <h1>SketchGuess</h1>
 
-<input required
-    id="nameInput"
-    placeholder="Your name"
->
+    <input required id="nameInput" placeholder="Your name">
 
-<button id="continueBtn">
-    Continue
-</button>
+    <button id="continueBtn">
+        Continue
+    </button>
 
-<script>
+    <script>
 
-document
-.getElementById("continueBtn")
-.addEventListener("click", () => {
-
-    const name =
         document
-        .getElementById("nameInput")
-        .value;
+            .getElementById("continueBtn")
+            .addEventListener("click", () => {
 
-    localStorage.setItem(
-        "playerName",
-        name
-    );
+                const name =
+                    document
+                        .getElementById("nameInput")
+                        .value
+                        .trim();
 
-    location.href =
-        "lobby.html";
-});
+                if (!name) {
+                    alert("Please enter your name.");
+                    return;
+                }
 
-</script>
+                localStorage.setItem(
+                    "playerName",
+                    name
+                );
+
+                location.href =
+                    "lobby.html";
+            });
+
+    </script>
 
 </body>
+
 </html>
