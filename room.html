@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SketchGuess - Room</title>
 
   <link rel="stylesheet" href="css/style.css">
@@ -48,9 +48,24 @@
       <canvas id="canvas"></canvas>
 
       <div id="chatBox">
-        <!-- guessing UI later -->
+
+        <input type="text" id="guessInput" placeholder="Enter your guess">
+
+        <button id="guessBtn">
+          Submit Guess
+        </button>
+
       </div>
 
+    </section>
+
+    <section id="resultSection" style="display:none;">
+      <h2>Round Results</h2>
+      <h3 id="correctAnswer"></h3>
+      <div id="guessResults"></div>
+      <button id="nextRoundBtn">
+        Next Round
+      </button>
     </section>
 
   </div>

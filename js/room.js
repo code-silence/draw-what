@@ -1,10 +1,12 @@
 import { db } from "./firebase.js";
+import { words } from "./words.js";
 
 import {
-  doc,
-  onSnapshot,
-  updateDoc,
-  getDoc
+    doc,
+    onSnapshot,
+    updateDoc,
+    getDoc,
+    arrayUnion
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -26,9 +28,17 @@ const startBtn = document.getElementById("startBtn");
 
 const lobbySection = document.getElementById("lobbySection");
 const gameSection = document.getElementById("gameSection");
+const resultSection = document.getElementById("resultSection");
 const status = document.getElementById("status");
+const correctAnswer = document.getElementById("correctAnswer");
+const guessResults = document.getElementById("guessResults");
+const nextRoundBtn = document.getElementById("nextRoundBtn");
+const guessBtn = document.getElementById("guessBtn");
+const guessInput = document.getElementById("guessInput");
 
 document.getElementById("roomCode").textContent = roomCode;
+
+let timerInterval = null;
 
 
 // ===== REALTIME LISTENER =====
@@ -57,13 +67,87 @@ onSnapshot(roomRef, (snap) => {
     // ===== GAME STATE CONTROL =====
     if (data.state === "drawing") {
 
+        resultSection.style.display = "none";
         lobbySection.style.display = "none";
         gameSection.style.display = "block";
+        guessInput.disabled = false;
+        guessBtn.disabled = false;
+        if (data.currentDrawer === playerName) {
+
+            guessInput.style.display = "none";
+            guessBtn.style.display = "none";
+
+        } else {
+
+            guessInput.style.display = "inline-block";
+            guessBtn.style.display = "inline-block";
+
+        }
 
         status.textContent =
             data.currentDrawer === playerName
                 ? `You are drawing: ${data.currentWord}`
                 : `${data.currentDrawer} is drawing`;
+
+        // ⏱ TIMER LOGIC
+        if (data.gameStartTime && !timerInterval) {
+            const startTime = data.gameStartTime;
+            const duration = 60 * 1000; // 60 seconds
+
+            timerInterval = setInterval(async () => {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const remaining = Math.max(0, Math.floor((duration - elapsed) / 1000));
+
+                status.textContent = `Time Left: ${remaining}s`;
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    if (data.host === playerName) {
+                        await updateDoc(roomRef, { state: "result" });
+                    }
+                }
+            }, 1000);
+        }
+
+    } else if (data.state === "result") {
+
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        lobbySection.style.display = "none";
+        gameSection.style.display = "none";
+        resultSection.style.display = "block";
+
+        if (data.host === playerName) {
+            nextRoundBtn.style.display = "block";
+        } else {
+            nextRoundBtn.style.display = "none";
+        }
+
+        correctAnswer.textContent = `Correct Answer: ${data.currentWord}`;
+        guessResults.innerHTML = "";
+        data.guesses?.forEach((g) => {
+            const p = document.createElement("p");
+            p.textContent = `${g.player} guessed: ${g.guess}`;
+            guessResults.appendChild(p);
+        });
+
+    } else if (data.state === "finished") {
+
+        lobbySection.style.display = "none";
+        gameSection.style.display = "none";
+        resultSection.style.display = "block";
+
+        correctAnswer.textContent = "Game Finished!";
+        guessResults.innerHTML = "";
+        const p = document.createElement("p");
+        p.textContent = "Everyone has drawn.";
+        guessResults.appendChild(p);
+        nextRoundBtn.textContent = "Play Again";
 
     } else {
 
@@ -100,9 +184,72 @@ startBtn.addEventListener("click", async () => {
     await updateDoc(roomRef, {
         state: "drawing",
         round: 1,
+        currentDrawerIndex: 0,
         players: shuffled,
         currentDrawer: shuffled[0].name,
-        currentWord: "Cat" // temporary word (we improve later)
+        currentWord: words[Math.floor(Math.random() * words.length)],
+        guesses: [],
+
+        // ⏱ ADD THIS
+        timer: 60,
+        gameStartTime: Date.now()
     });
+
+});
+
+nextRoundBtn.addEventListener("click", async () => {
+    const snap = await getDoc(roomRef);
+    const data = snap.data();
+    const nextIndex = data.currentDrawerIndex + 1;
+    // everyone finished
+    if (nextIndex >= data.players.length) {
+        await updateDoc(roomRef, {
+            state: "finished"
+        });
+        return;
+    }
+    await updateDoc(roomRef, {
+        state: "drawing",
+        currentDrawerIndex: nextIndex,
+        currentDrawer: data.players[nextIndex].name,
+        currentWord: "Dog", // temporary
+        guesses: [],
+        gameStartTime: Date.now()
+    });
+});
+
+guessBtn.addEventListener("click", async () => {
+
+    const guess = guessInput.value.trim();
+
+    if (!guess) return;
+
+    const snap = await getDoc(roomRef);
+
+    const data = snap.data();
+
+    const alreadyGuessed =
+        data.guesses?.some(
+            g => g.player === playerName
+        );
+
+    if (alreadyGuessed) {
+        alert("You already guessed.");
+        return;
+    }
+
+    await updateDoc(roomRef, {
+
+        guesses: arrayUnion({
+            player: playerName,
+            guess: guess
+        })
+
+    });
+
+    guessInput.disabled = true;
+    guessBtn.disabled = true;
+
+    guessInput.value = "";
 
 });
