@@ -35,38 +35,32 @@
 
         <section id="gameSection" style="display:none; height: 100%; width: 100%;">
             
-            <div class="room-grid" style="height: 100%;">
+            <div class="room-grid" style="height: 100%; display: flex; flex-direction: column;">
                 
-                <div class="canvas-section">
+                <div class="canvas-section" style="flex: 1; display: flex; flex-direction: column; gap: 15px; min-height: 0;">
                         
-                        <div class="canvas-status">
-                            <span id="status" class="pulse-text">Waiting for game...</span>
-                            <span id="wordBox" class="timer-text" style="color: #33ff99;"></span>
-                        </div>
+                    <div class="canvas-status">
+                        <!-- বাম দিকে: গেমের স্ট্যাটাস -->
+                        <span id="status" class="pulse-text">Waiting for game...</span>
                         
-                        <div class="canvas-wrapper">
-                            <canvas id="canvas"></canvas>
-                        </div>
+                        <!-- ডান দিকে: ড্রয়ারের সিক্রেট ওয়ার্ড (span ট্যাগ ব্যবহার করা হলো) -->
+                        <span id="wordBox" class="secret-word-box"></span>
+                    </div>
+                    
+                    <div class="canvas-wrapper" style="flex: 1;">
+                        <canvas id="canvas"></canvas>
+                    </div>
 
-                </div>
-
-                <div class="side-panel">
-                    <div class="scifi-panel" style="height: 100%;">
-                        <h3 class="panel-title">Comments</h3>
-                        
-                        <div id="chatBox" style="display: flex; flex-direction: column; height: 100%; padding: 15px; gap: 10px;">
-                            
-                            <div class="chat-input-wrapper" style="margin-top: auto; display: flex; gap: 10px;">
-                                <input type="text" id="guessInput" placeholder="Enter your guess" style="flex: 1; background: transparent; border: 1px solid rgba(51, 204, 255, 0.2); color: #fff; padding: 10px; font-family: 'Share Tech Mono', monospace; outline: none;">
-                                
-                                <button id="guessBtn" class="send-btn" style="border: 1px solid rgba(51,204,255,0.2);">
-                                    SUBMIT GUESS
-                                </button>
-                            </div>
+                    <div id="chatBox" class="scifi-panel guess-panel">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="guessInput" placeholder="ENTER YOUR GUESS HERE..." autocomplete="off">
+                            <button id="guessBtn" class="send-btn">
+                                SUBMIT GUESS
+                            </button>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
         </section>
@@ -108,6 +102,8 @@
         observer.observe(gameSec, { attributes: true, attributeFilter: ['style'] });
         window.addEventListener('resize', resizeCanvas);
     </script>
+
+    
 
 </body>
 </html>

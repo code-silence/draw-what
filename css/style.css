@@ -184,7 +184,7 @@ body.atlas-theme {
 .atlas-input-wrapper input::placeholder { color: rgba(255, 255, 255, 0.2); }
 
 /* =========================================
-   6. INDEX & LOBBY SPECIFICS
+   6. INDEX & LOBBY SPECIFICS (RESTORED)
    ========================================= */
 .atlas-main {
     flex: 1;
@@ -205,7 +205,7 @@ body.atlas-theme {
 }
 
 /* =========================================
-   7. INTERACTIVE ROBOT (ARTIE)
+   7. INTERACTIVE ROBOT (ARTIE) (RESTORED)
    ========================================= */
 .desktop-astronaut {
     position: fixed;
@@ -271,10 +271,10 @@ body.atlas-theme {
 @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #33ccff; } }
 
 /* =========================================
-   8. GAME ROOM (HOLOGRAPHIC SKETCHBOARD)
+   8. GAME ROOM (FULL SCREEN CANVAS)
    ========================================= */
 .room-layout {
-    padding: 20px 3vw !important;
+    padding: 20px 3vw 40px !important; /* নিচের দিকের প্যাডিং বাড়িয়ে 40px করা হলো */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -282,15 +282,6 @@ body.atlas-theme {
 }
 .room-header { margin-bottom: 20px !important; flex-shrink: 0; }
 
-.room-grid {
-    display: grid;
-    grid-template-columns: 2.5fr 1fr;
-    gap: 20px;
-    flex: 1;
-    min-height: 0; 
-}
-
-/* Glassmorphism Panels */
 .scifi-panel {
     background: rgba(1, 3, 8, 0.15); 
     backdrop-filter: blur(6px); 
@@ -301,17 +292,6 @@ body.atlas-theme {
     position: relative;
     overflow: hidden;
     box-shadow: inset 0 0 20px rgba(51, 204, 255, 0.05);
-}
-.scifi-panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, #33ccff, transparent);
-    animation: borderScan 4s linear infinite;
-}
-@keyframes borderScan {
-    0% { left: -100%; }
-    100% { left: 100%; }
 }
 
 .panel-title {
@@ -337,15 +317,7 @@ body.atlas-theme {
     border-bottom: 1px dashed rgba(255,255,255,0.1);
 }
 
-/* ==== Canvas Section (White with glowing animated border) ==== */
-.canvas-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    height: 100%;
-    min-height: 0;
-}
-
+/* ==== Canvas Section ==== */
 .canvas-status {
     display: flex;
     justify-content: space-between;
@@ -364,7 +336,7 @@ body.atlas-theme {
     flex: 1;
     position: relative;
     border-radius: 8px;
-    padding: 4px; /* বর্ডারের জায়গা */
+    padding: 4px; 
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -384,7 +356,7 @@ body.atlas-theme {
     z-index: -1;
 }
 
-/* সলিড সাদা ক্যানভাস ব্যাকগ্রাউন্ড */
+/* সলিড সাদা ক্যানভাস */
 .canvas-wrapper::after {
     content: '';
     position: absolute;
@@ -399,7 +371,6 @@ body.atlas-theme {
     100% { transform: rotate(360deg); }
 }
 
-/* Canvas Element Fixes */
 #canvas {
     width: 100%;
     height: 100%; 
@@ -411,28 +382,65 @@ body.atlas-theme {
     position: relative;
 }
 
-/* Side Panel (Chat & Players) */
-.side-panel {
+/* ==== Guess Input Panel (Bottom Bar) ==== */
+
+.guess-panel {
+    flex-direction: row;
+    padding: 15px;
+    align-items: center;
+    background: rgba(1, 3, 8, 0.6); 
+    border-radius: 8px;
+    flex-shrink: 0;
+    margin-bottom: 15px; /* ইনপুট বক্সটিকে স্ক্রিনের নিচ থেকে আরেকটু ওপরে ওঠানো হলো */
+}
+
+.chat-input-wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    height: 100%;
-    min-height: 0;
+    width: 100%;
+    gap: 15px;
+}
+
+.chat-input-wrapper input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(51, 204, 255, 0.3);
+    border-radius: 4px;
+    color: #fff;
+    padding: 15px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.chat-input-wrapper input:focus {
+    border-color: #33ff99;
+    box-shadow: 0 0 15px rgba(51, 255, 153, 0.2);
 }
 
 .send-btn {
     background: rgba(51, 204, 255, 0.1);
-    border: none;
-    border-left: 1px solid rgba(51, 204, 255, 0.2);
+    border: 1px solid rgba(51, 204, 255, 0.2);
+    border-radius: 4px;
     color: #33ccff;
-    padding: 0 20px;
+    padding: 0 30px;
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
+    font-size: 1.1rem;
     letter-spacing: 2px;
     cursor: pointer;
     transition: 0.3s;
 }
-.send-btn:hover { background: #33ccff; color: #000; }
+
+.send-btn:hover { 
+    background: #33ccff; 
+    color: #000; 
+    box-shadow: 0 0 15px rgba(51, 204, 255, 0.4);
+}
+
+
+
+
 
 /* =========================================
    9. MOBILE RESPONSIVENESS
@@ -490,10 +498,10 @@ body.atlas-theme {
 
     .desktop-astronaut { display: none !important; }
 
-    /* Game Room Mobile Fixes */
-    .room-grid {
-        grid-template-columns: 1fr; 
-        height: auto;
-    }
-    .canvas-section, .side-panel { min-height: 400px; }
+    .room-layout { padding: 10px !important; }
+    .guess-panel { flex-direction: column; padding: 10px; }
+    .chat-input-wrapper { flex-direction: column; }
+    .send-btn { width: 100%; padding: 10px; }
 }
+
+
