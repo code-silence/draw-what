@@ -8,7 +8,7 @@
 }
 
 body.atlas-theme {
-    background-color: #010308; /* ডিপ স্পেস ডার্ক ব্লু/ব্ল্যাক */
+    background-color: #010308;
     color: #ffffff;
     font-family: 'Jost', sans-serif;
     min-height: 100vh;
@@ -337,7 +337,7 @@ body.atlas-theme {
     border-bottom: 1px dashed rgba(255,255,255,0.1);
 }
 
-/* Canvas Area */
+/* ==== Canvas Section (White with glowing animated border) ==== */
 .canvas-section {
     display: flex;
     flex-direction: column;
@@ -346,51 +346,60 @@ body.atlas-theme {
     min-height: 0;
 }
 
-.canvas-wrapper {
-    flex: 1;
-    position: relative;
-    background: #02040a; 
-    border: 1px solid rgba(51, 204, 255, 0.3);
-    border-radius: 8px;
-    box-shadow: inset 0 0 40px rgba(51, 204, 255, 0.05), 0 0 20px rgba(0,0,0,0.5);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    min-height: 0;
-}
-
-/* Laser Scan Animation on Canvas */
-.canvas-wrapper::after {
-    content: '';
-    position: absolute;
-    top: -10%; left: 0; width: 100%; height: 2px;
-    background: rgba(51, 204, 255, 0.4);
-    box-shadow: 0 0 15px 2px rgba(51, 204, 255, 0.6);
-    animation: scanCanvas 5s ease-in-out infinite;
-    pointer-events: none; 
-    z-index: 10;
-}
-@keyframes scanCanvas {
-    0% { top: -10%; opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { top: 110%; opacity: 0; }
-}
-
 .canvas-status {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
     background: rgba(51, 204, 255, 0.1);
-    border-bottom: 1px solid rgba(51, 204, 255, 0.2);
+    border: 1px solid rgba(51, 204, 255, 0.2);
+    border-radius: 8px;
     font-family: 'Share Tech Mono', monospace; 
     font-size: 1rem;
     color: #fff;
-    z-index: 11; /* To keep above laser */
+    z-index: 11;
 }
 
-/* Original Canvas Tag Fixes */
+.canvas-wrapper {
+    flex: 1;
+    position: relative;
+    border-radius: 8px;
+    padding: 4px; /* বর্ডারের জায়গা */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+    z-index: 1;
+    background: #02040a; 
+}
+
+/* অ্যানিমেটেড বর্ডার */
+.canvas-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(transparent, rgba(51,204,255,0.1), #33ccff, #ff3366, rgba(51,204,255,0.1), transparent);
+    animation: rotateBorder 4s linear infinite;
+    z-index: -1;
+}
+
+/* সলিড সাদা ক্যানভাস ব্যাকগ্রাউন্ড */
+.canvas-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 4px; 
+    background: #ffffff; 
+    border-radius: 5px;
+    z-index: -1;
+}
+
+@keyframes rotateBorder {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Canvas Element Fixes */
 #canvas {
     width: 100%;
     height: 100%; 
@@ -398,6 +407,8 @@ body.atlas-theme {
     background-color: transparent;
     cursor: crosshair;
     touch-action: none; 
+    z-index: 10;
+    position: relative;
 }
 
 /* Side Panel (Chat & Players) */
@@ -481,7 +492,7 @@ body.atlas-theme {
 
     /* Game Room Mobile Fixes */
     .room-grid {
-        grid-template-columns: 1fr; /* মোবাইলে নিচে নিচে আসবে */
+        grid-template-columns: 1fr; 
         height: auto;
     }
     .canvas-section, .side-panel { min-height: 400px; }
