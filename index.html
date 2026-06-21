@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SketchGuess</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+<body class="atlas-theme">
 
-<body>
+    <div class="space-dust layer-1"></div>
+    <div class="space-dust layer-2"></div>
+    <div class="glow-ring"></div>
 
-    <h1>SketchGuess</h1>
+    <div class="atlas-container">
+        <header class="atlas-header">
+            <div class="atlas-logo">Draw What!</div>
+        </header>
 
-    <input required id="nameInput" placeholder="Your name">
+        <main class="atlas-main">
+            <h1 class="atlas-headline">
+                <span class="text-light">DRAW WHAT!</span><br>
+                <span class="text-bold">A FUN AND CREATIVE</span><br>
+                <span class="text-light">GAME FOR ALL AGES</span><br>
+                <span class="text-bold text-glow">INTUITION</span>
+            </h1>
 
-    <button id="continueBtn">
-        Continue
-    </button>
+            <div class="atlas-actions">
+                <div class="atlas-input-wrapper">
+                    <span class="input-label">NAME</span>
+                    <input required id="nameInput" placeholder="ENTER YOUR NAME" autocomplete="off">
+                </div>
+                
+                <button id="continueBtn" class="atlas-btn-primary" style="margin-top: 15px; width: 100%;">
+                    <span class="btn-text">CONTINUE</span>
+                </button>
+            </div>
+        </main>
+    </div>
 
     <script>
-
         document
             .getElementById("continueBtn")
             .addEventListener("click", () => {
-
                 const name =
                     document
                         .getElementById("nameInput")
@@ -40,9 +63,6 @@
                 location.href =
                     "lobby.html";
             });
-
     </script>
-
 </body>
-
 </html>

@@ -1,29 +1,108 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lobby</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="atlas-theme">
 
-<h2>Lobby</h2>
+    <div class="space-dust layer-1"></div>
+    <div class="space-dust layer-2"></div>
+    <div class="glow-ring"></div>
+    
+    <div id="draggableRobot" class="desktop-astronaut">
+        <div id="robotSpeech" class="robot-speech-bubble">
+            <span id="speechText"></span>
+        </div>
+        <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" alt="Waving Robot">
+    </div>
 
-<button id="createRoomBtn">
-    Create Room
-</button>
+    <div class="atlas-container">
+        <header class="atlas-header">
+            <div class="atlas-logo">SKETCHGUESS</div>
+            <div class="atlas-nav-right">
+                <div class="hamburger-icon"><span></span><span></span></div>
+            </div>
+        </header>
 
-<br><br>
+        <main class="atlas-main" style="flex-direction: row; justify-content: space-between; align-items: center; width: 100%;">
+            
+            <div style="flex: 1;">
+                <h1 class="atlas-headline" style="text-align: left;">
+                    <span class="text-light">ESTABLISH A</span><br>
+                    <span class="text-bold text-glow">NEW NODE</span>
+                </h1>
+                
+                <button id="createRoomBtn" class="atlas-btn-primary" style="margin-bottom: 40px;">
+                    <span class="btn-text">CREATE ROOM</span>
+                </button>
+                
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <hr style="flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <span style="font-family: 'Share Tech Mono', monospace; color: rgba(255,255,255,0.5); font-size: 0.8rem;">OR CONNECT TO EXISTING</span>
+                    <hr style="flex: 1; border: none; border-top: 1px solid rgba(255,255,255,0.2);">
+                </div>
+                
+                <div class="join-room-wrapper" style="display: flex; gap: 15px;">
+                    <div class="atlas-input-wrapper" style="flex: 1;">
+                        <span class="input-label">NODE ID</span>
+                        <input id="roomCodeInput" placeholder="ENTER ROOM CODE" autocomplete="off">
+                    </div>
+                    <button id="joinRoomBtn" class="nav-btn-outline">JOIN ROOM</button>
+                </div>
+            </div>
+            
+            <div style="flex: 1; display: flex; justify-content: flex-end;"></div>
+        </main>
+    </div>
 
-<input
-    id="roomCodeInput"
-    placeholder="Room Code"
->
+    <script type="module" src="js/lobby.js"></script>
 
-<button id="joinRoomBtn">
-    Join Room
-</button>
+    <script>
+        const robot = document.getElementById('draggableRobot');
+        const speechBubble = document.getElementById('robotSpeech');
+        const speechText = document.getElementById('speechText');
+        let isDragging = false, startX, startY, offsetX, offsetY, isRulesShowing = false;
 
-<script type="module"
-src="js/lobby.js"></script>
+        setTimeout(() => {
+            speechText.innerHTML = '<div class="typewriter-text">Hi, I am Artie! 🎨 Ready to draw?</div>';
+            speechBubble.classList.add('active');
+            setTimeout(() => { if (!isRulesShowing) speechBubble.classList.remove('active'); }, 5000);
+        }, 1000);
 
+        if (robot) {
+            robot.addEventListener('mousedown', (e) => {
+                isDragging = true; startX = e.clientX; startY = e.clientY;
+                offsetX = e.clientX - robot.getBoundingClientRect().left;
+                offsetY = e.clientY - robot.getBoundingClientRect().top;
+                robot.style.cursor = 'grabbing';
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return; e.preventDefault();
+                robot.style.left = (e.clientX - offsetX) + 'px';
+                robot.style.top = (e.clientY - offsetY) + 'px';
+                robot.style.right = 'auto'; robot.style.transform = 'none'; 
+            });
+            document.addEventListener('mouseup', (e) => {
+                if (!isDragging) return; isDragging = false; robot.style.cursor = 'grab';
+                if (Math.abs(e.clientX - startX) < 5 && Math.abs(e.clientY - startY) < 5) toggleRules();
+            });
+        }
+
+        function toggleRules() {
+            if (speechBubble.classList.contains('active') && isRulesShowing) {
+                speechBubble.classList.remove('active'); isRulesShowing = false;
+            } else {
+                speechBubble.classList.remove('active'); 
+                setTimeout(() => {
+                    speechText.innerHTML = '<div class="typewriter-text" style="animation: typing 2s steps(50, end);">RULES: 1. Draw Fast 2. Guess Smart 3. Win! 🏆</div>';
+                    speechBubble.classList.add('active'); isRulesShowing = true;
+                }, 100); 
+            }
+        }
+    </script>
 </body>
 </html>

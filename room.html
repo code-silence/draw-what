@@ -1,79 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SketchGuess - Room</title>
-
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SketchGuess - Room</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+<body class="atlas-theme">
 
-<body>
+    <div class="space-dust layer-1"></div>
+    <div class="space-dust layer-2"></div>
+    <div class="glow-ring" style="opacity: 0.3;"></div>
 
-  <div id="app">
+    <div id="app" class="atlas-container room-layout">
+        
+        <header class="atlas-header room-header">
+            <div class="atlas-logo">SKETCHGUESS</div>
+            <div class="room-info">
+                <span class="nav-text" id="roomCode" class="text-glow">Room: ----</span>
+            </div>
+        </header>
 
-    <!-- HEADER -->
-    <header>
-      <h1>SketchGuess</h1>
-      <h3 id="roomCode">Room: ----</h3>
-    </header>
+        <section id="lobbySection" class="scifi-panel" style="padding: 30px; margin-bottom: 20px; align-items: center;">
+            <h2 class="panel-title" style="margin-bottom: 20px; font-size: 1.5rem; text-align: center;">PLAYERS</h2>
+            
+            <ul id="playerList" class="scifi-list" style="width: 100%; max-width: 400px; text-align: center; margin-bottom: 20px;"></ul>
+            
+            <button id="startBtn" class="atlas-btn-primary" style="display:none; width: 250px;">
+                <span class="btn-text">START GAME</span>
+            </button>
+        </section>
 
-    <hr>
+        <section id="gameSection" class="room-grid" style="display:none;">
+            
+            <div class="canvas-section">
+                <div class="canvas-wrapper">
+                    <div class="canvas-status">
+                        <span id="status" class="pulse-text">Waiting for game...</span>
+                        <span id="wordBox" class="timer-text" style="color: #33ff99;"></span>
+                    </div>
+                    
+                    <canvas id="canvas" width="800" height="500"></canvas>
+                </div>
+            </div>
 
-    <!-- WAITING LOBBY -->
-    <section id="lobbySection">
+            <div class="side-panel">
+                <div class="scifi-panel" style="height: 100%;">
+                    <h3 class="panel-title">TRANSMISSION LOG</h3>
+                    
+                    <div id="chatBox" style="display: flex; flex-direction: column; height: 100%; padding: 15px; gap: 10px;">
+                        
+                        <div class="chat-input-wrapper" style="margin-top: auto; display: flex; gap: 10px;">
+                            <input type="text" id="guessInput" placeholder="Enter your guess" style="flex: 1; background: transparent; border: 1px solid rgba(51, 204, 255, 0.2); color: #fff; padding: 10px; font-family: 'Share Tech Mono', monospace; outline: none;">
+                            
+                            <button id="guessBtn" class="send-btn" style="border: 1px solid rgba(51,204,255,0.2);">
+                                SUBMIT GUESS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-      <h2>Players</h2>
+        </section>
 
-      <ul id="playerList"></ul>
+        <section id="resultSection" class="scifi-panel" style="display:none; padding: 30px; margin-top: 20px; align-items: center;">
+            <h2 class="panel-title" style="color: #ffcc00; margin-bottom: 20px; font-size: 1.5rem;">ROUND RESULTS</h2>
+            
+            <h3 id="correctAnswer" style="color: #33ff99; font-family: 'Jost', sans-serif; letter-spacing: 2px; margin-bottom: 20px;"></h3>
+            
+            <div id="guessResults" class="scifi-list" style="width: 100%; max-width: 400px; margin-bottom: 20px; text-align: center;"></div>
+            
+            <button id="nextRoundBtn" class="nav-btn-outline" style="border-color: #33ccff; color: #33ccff;">
+                NEXT ROUND
+            </button>
+        </section>
 
-      <button id="startBtn" style="display:none;">
-        Start Game
-      </button>
+    </div>
 
-    </section>
-
-    <hr>
-
-    <!-- GAME SECTION (hidden initially) -->
-    <section id="gameSection" style="display:none;">
-
-      <h2 id="status">Waiting for game...</h2>
-
-      <div id="wordBox">
-        <!-- drawer only sees word later -->
-      </div>
-
-      <canvas id="canvas"></canvas>
-
-      <div id="chatBox">
-
-        <input type="text" id="guessInput" placeholder="Enter your guess">
-
-        <button id="guessBtn">
-          Submit Guess
-        </button>
-
-      </div>
-
-    </section>
-
-    <section id="resultSection" style="display:none;">
-      <h2>Round Results</h2>
-      <h3 id="correctAnswer"></h3>
-      <div id="guessResults"></div>
-      <button id="nextRoundBtn">
-        Next Round
-      </button>
-    </section>
-
-  </div>
-
-  <!-- SCRIPTS -->
-  <script type="module" src="js/room.js"></script>
-  <script type="module" src="js/canvas.js"></script>
+    <script type="module" src="js/room.js"></script>
+    <script type="module" src="js/canvas.js"></script>
 
 </body>
-
 </html>
