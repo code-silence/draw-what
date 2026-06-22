@@ -13,10 +13,12 @@ export const words = [
     "Car",
     "Bus",
     "Train",
+    
 
     "Laptop",
     "Phone",
     "Keyboard",
+    "Charger",
 
     "Chair",
     "Table",

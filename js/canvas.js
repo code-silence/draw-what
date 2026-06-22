@@ -26,20 +26,38 @@ let lastX = null;
 let lastY = null;
 
 // Subscribe to room updates to know who can draw
+let lastGameStartTime = null;
 onSnapshot(roomRef, (snap) => {
+
     if (!snap.exists()) return;
 
     const data = snap.data();
-    
-    if (data.state === "drawing" && data.gameStartTime) {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+    // clear only when a NEW round starts
+    if (
+        data.gameStartTime &&
+        data.gameStartTime !== lastGameStartTime
+    ) {
 
-    // ONLY DRAWER CAN DRAW
-    canDraw = String(data.currentDrawer) === String(playerName);
+        ctx.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        lastX = null;
+        lastY = null;
+
+        lastGameStartTime =
+            data.gameStartTime;
+    }
+
+    // only drawer can draw
+    canDraw =
+        String(data.currentDrawer) ===
+        String(playerName);
+
 });
 
 function drawLine(x0, y0, x1, y1) {

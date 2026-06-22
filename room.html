@@ -1,79 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SketchGuess - Room</title>
-
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SketchGuess - Room</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&family=Rajdhani:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
 </head>
+<body class="atlas-theme">
 
-<body>
+    <div class="space-dust layer-1"></div>
+    <div class="space-dust layer-2"></div>
+    <div class="glow-ring" style="opacity: 0.3;"></div>
 
-  <div id="app">
+    <div id="app" class="atlas-container room-layout">
+        
+        <header class="atlas-header room-header">
+            <div class="atlas-logo">Draw What!</div>
+            <div class="room-info">
+                <span class="nav-text" id="roomCode" class="text-glow">Room: ----</span>
+            </div>
+        </header>
 
-    <!-- HEADER -->
-    <header>
-      <h1>SketchGuess</h1>
-      <h3 id="roomCode">Room: ----</h3>
-    </header>
+        <section id="lobbySection" class="scifi-panel" style="padding: 30px; margin-bottom: 20px; align-items: center;">
+            <h2 class="panel-title" style="margin-bottom: 20px; font-size: 1.5rem; text-align: center;">PLAYERS</h2>
+            
+            <ul id="playerList" class="scifi-list" style="width: 100%; max-width: 400px; text-align: center; margin-bottom: 20px;"></ul>
+            
+            <button id="startBtn" class="atlas-btn-primary" style="display:none; width: 250px;">
+                <span class="btn-text">START GAME</span>
+            </button>
+        </section>
 
-    <hr>
+        <section id="gameSection" style="display:none; height: 100%; width: 100%;">
+            
+            <div class="room-grid" style="height: 100%; display: flex; flex-direction: column;">
+                
+                <div class="canvas-section" style="flex: 1; display: flex; flex-direction: column; gap: 15px; min-height: 0;">
+                        
+                    <div class="canvas-status">
+                        <!-- বাম দিকে: গেমের স্ট্যাটাস -->
+                        <span id="status" class="pulse-text">Waiting for game...</span>
+                        
+                        <!-- ডান দিকে: ড্রয়ারের সিক্রেট ওয়ার্ড (span ট্যাগ ব্যবহার করা হলো) -->
+                        <span id="wordBox" class="secret-word-box"></span>
+                    </div>
+                    
+                    <div class="canvas-wrapper" style="flex: 1;">
+                        <canvas id="canvas"></canvas>
+                    </div>
 
-    <!-- WAITING LOBBY -->
-    <section id="lobbySection">
+                    <div id="chatBox" class="scifi-panel guess-panel">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="guessInput" placeholder="ENTER YOUR GUESS HERE..." autocomplete="off">
+                            <button id="guessBtn" class="send-btn">
+                                SUBMIT GUESS
+                            </button>
+                        </div>
+                    </div>
 
-      <h2>Players</h2>
+                </div>
+            </div>
 
-      <ul id="playerList"></ul>
+        </section>
 
-      <button id="startBtn" style="display:none;">
-        Start Game
-      </button>
+        <section id="resultSection" class="scifi-panel" style="display:none; padding: 30px; margin-top: 20px; align-items: center;">
+            <h2 class="panel-title" style="color: #ffcc00; margin-bottom: 20px; font-size: 1.5rem;">ROUND RESULTS</h2>
+            
+            <h3 id="correctAnswer" style="color: #33ff99; font-family: 'Jost', sans-serif; letter-spacing: 2px; margin-bottom: 20px;"></h3>
+            
+            <div id="guessResults" class="scifi-list" style="width: 100%; max-width: 400px; margin-bottom: 20px; text-align: center;"></div>
+            
+            <button id="nextRoundBtn" class="nav-btn-outline" style="border-color: #33ccff; color: #33ccff;">
+                NEXT ROUND
+            </button>
+        </section>
 
-    </section>
+    </div>
 
-    <hr>
+    <script type="module" src="js/room.js"></script>
+    <script type="module" src="js/canvas.js"></script>
 
-    <!-- GAME SECTION (hidden initially) -->
-    <section id="gameSection" style="display:none;">
+    <script>
+        const gameSec = document.getElementById('gameSection');
+        const drawCanvas = document.getElementById('canvas');
+        
+        function resizeCanvas() {
+            if (window.getComputedStyle(gameSec).display !== 'none') {
+                const rect = drawCanvas.parentElement.getBoundingClientRect();
+                if (rect.width > 0 && rect.height > 0) {
+                    drawCanvas.width = rect.width;
+                    drawCanvas.height = rect.height;
+                }
+            }
+        }
 
-      <h2 id="status">Waiting for game...</h2>
+        const observer = new MutationObserver(() => {
+            setTimeout(resizeCanvas, 50); 
+        });
+        observer.observe(gameSec, { attributes: true, attributeFilter: ['style'] });
+        window.addEventListener('resize', resizeCanvas);
+    </script>
 
-      <div id="wordBox">
-        <!-- drawer only sees word later -->
-      </div>
 
-      <canvas id="canvas"></canvas>
-
-      <div id="chatBox">
-
-        <input type="text" id="guessInput" placeholder="Enter your guess">
-
-        <button id="guessBtn">
-          Submit Guess
-        </button>
-
-      </div>
-
-    </section>
-
-    <section id="resultSection" style="display:none;">
-      <h2>Round Results</h2>
-      <h3 id="correctAnswer"></h3>
-      <div id="guessResults"></div>
-      <button id="nextRoundBtn">
-        Next Round
-      </button>
-    </section>
-
-  </div>
-
-  <!-- SCRIPTS -->
-  <script type="module" src="js/room.js"></script>
-  <script type="module" src="js/canvas.js"></script>
 
 </body>
-
 </html>
