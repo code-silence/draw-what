@@ -99,7 +99,7 @@ onSnapshot(roomRef, (snap) => {
         if (data.gameStartTime && !timerInterval) {
 
             const startTime = data.gameStartTime;
-            const duration = 10 * 1000;
+            const duration = 60 * 1000;
 
             timerInterval = setInterval(async () => {
 
