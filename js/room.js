@@ -30,6 +30,7 @@ const lobbySection = document.getElementById("lobbySection");
 const gameSection = document.getElementById("gameSection");
 const resultSection = document.getElementById("resultSection");
 const status = document.getElementById("status");
+const wordBox = document.getElementById("wordBox");
 const correctAnswer = document.getElementById("correctAnswer");
 const guessResults = document.getElementById("guessResults");
 const nextRoundBtn = document.getElementById("nextRoundBtn");
@@ -72,7 +73,7 @@ onSnapshot(roomRef, (snap) => {
         resultSection.style.display = "none";
         lobbySection.style.display = "none";
         gameSection.style.display = "block";
-        
+
         if (data.currentDrawer === playerName) {
 
             guessInput.style.display = "none";
@@ -87,9 +88,20 @@ onSnapshot(roomRef, (snap) => {
 
         status.textContent =
             data.currentDrawer === playerName
-                ? `You are drawing: ${data.currentWord}`
+                ? "You are drawing"
                 : `${data.currentDrawer} is drawing`;
 
+        if (data.currentDrawer === playerName) {
+
+            wordBox.textContent =
+                `WORD: ${data.currentWord}`;
+
+        } else {
+
+            wordBox.textContent =
+                "?????";
+
+        }
         // ⏱ TIMER LOGIC
         if (data.state === "drawing" && data.gameStartTime && !timerInterval) {
             const startTime = data.gameStartTime;
@@ -100,7 +112,10 @@ onSnapshot(roomRef, (snap) => {
                 const elapsed = now - startTime;
                 const remaining = Math.max(0, Math.floor((duration - elapsed) / 1000));
 
-                status.textContent = `Time Left: ${remaining}s`;
+                status.textContent =
+                    data.currentDrawer === playerName
+                        ? `You are drawing • ⏱ ${remaining}s`
+                        : `${data.currentDrawer} is drawing • ⏱ ${remaining}s`;
 
                 if (remaining <= 0) {
                     clearInterval(timerInterval);
