@@ -18,8 +18,15 @@
         
         <header class="atlas-header room-header">
             <div class="atlas-logo">Draw What!</div>
-            <div class="room-info">
+            
+            <div class="room-info" style="display: flex; align-items: center; gap: 10px;">
                 <span class="nav-text" id="roomCode" class="text-glow">Room: ----</span>
+                <button id="copyCodeBtn" class="copy-btn" title="Copy Room Code">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
             </div>
         </header>
 
@@ -40,10 +47,8 @@
                 <div class="canvas-section" style="flex: 1; display: flex; flex-direction: column; gap: 15px; min-height: 0;">
                         
                     <div class="canvas-status">
-                        <!-- বাম দিকে: গেমের স্ট্যাটাস -->
                         <span id="status" class="pulse-text">Waiting for game...</span>
                         
-                        <!-- ডান দিকে: ড্রয়ারের সিক্রেট ওয়ার্ড (span ট্যাগ ব্যবহার করা হলো) -->
                         <span id="wordBox" class="secret-word-box"></span>
                     </div>
                     
@@ -103,7 +108,23 @@
         window.addEventListener('resize', resizeCanvas);
     </script>
 
-
+    <script>
+        const copyBtn = document.getElementById('copyCodeBtn');
+        const roomCodeSpan = document.getElementById('roomCode');
+        
+        if (copyBtn && roomCodeSpan) {
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = roomCodeSpan.innerText.replace('Room:', '').trim();
+                
+                if (textToCopy && textToCopy !== '----') {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.classList.add('copied');
+                        setTimeout(() => copyBtn.classList.remove('copied'), 2000);
+                    });
+                }
+            });
+        }
+    </script>
 
 </body>
 </html>

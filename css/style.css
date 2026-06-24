@@ -184,7 +184,7 @@ body.atlas-theme {
 .atlas-input-wrapper input::placeholder { color: rgba(255, 255, 255, 0.2); }
 
 /* =========================================
-   6. INDEX & LOBBY SPECIFICS (RESTORED)
+   6. INDEX & LOBBY SPECIFICS
    ========================================= */
 .atlas-main {
     flex: 1;
@@ -205,7 +205,7 @@ body.atlas-theme {
 }
 
 /* =========================================
-   7. INTERACTIVE ROBOT (ARTIE) (RESTORED)
+   7. INTERACTIVE ROBOT (ARTIE)
    ========================================= */
 .desktop-astronaut {
     position: fixed;
@@ -270,11 +270,81 @@ body.atlas-theme {
 @keyframes typing { from { width: 0 } to { width: 100% } }
 @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: #33ccff; } }
 
+
 /* =========================================
-   8. GAME ROOM (FULL SCREEN CANVAS)
+   8. SCI-FI MODAL (GAME RULES POPUP)
+   ========================================= */
+.scifi-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(1, 3, 8, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.scifi-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.scifi-modal-content {
+    background: rgba(1, 3, 8, 0.6);
+    border: 1px solid #33ccff;
+    box-shadow: 0 0 30px rgba(51, 204, 255, 0.2), inset 0 0 20px rgba(51, 204, 255, 0.1);
+    border-radius: 12px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    font-family: 'Share Tech Mono', monospace;
+    color: #fff;
+}
+
+.scifi-modal-overlay.active .scifi-modal-content {
+    transform: scale(1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    background: transparent;
+    border: none;
+    color: #ff3366;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: text-shadow 0.3s;
+    outline: none;
+}
+
+.close-btn:hover {
+    text-shadow: 0 0 10px #ff3366;
+}
+
+.rules-text { margin-top: 20px; }
+.rules-text p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    background: rgba(51, 204, 255, 0.05);
+    padding: 15px;
+    border-left: 3px solid #33ccff;
+    border-radius: 0 8px 8px 0;
+}
+
+
+/* =========================================
+   9. GAME ROOM (FULL SCREEN CANVAS)
    ========================================= */
 .room-layout {
-    padding: 20px 3vw 40px !important; /* নিচের দিকের প্যাডিং বাড়িয়ে 40px করা হলো */
+    padding: 20px 3vw 40px !important; 
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -332,6 +402,31 @@ body.atlas-theme {
     z-index: 11;
 }
 
+/* Secret Word Box (Drawer Only) */
+.secret-word-box {
+    font-family: 'Jost', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #33ff99 !important; 
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(51, 255, 153, 0.5);
+    transition: all 0.3s ease;
+}
+.secret-word-box:not(:empty) {
+    display: inline-block !important; 
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: rgba(51, 255, 153, 0.1) !important;
+    border: 1px solid rgba(51, 255, 153, 0.3) !important;
+    padding: 5px 15px !important;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(51, 255, 153, 0.1);
+}
+.secret-word-box:empty {
+    display: none !important; 
+}
+
 .canvas-wrapper {
     flex: 1;
     position: relative;
@@ -383,7 +478,6 @@ body.atlas-theme {
 }
 
 /* ==== Guess Input Panel (Bottom Bar) ==== */
-
 .guess-panel {
     flex-direction: row;
     padding: 15px;
@@ -391,7 +485,7 @@ body.atlas-theme {
     background: rgba(1, 3, 8, 0.6); 
     border-radius: 8px;
     flex-shrink: 0;
-    margin-bottom: 15px; /* ইনপুট বক্সটিকে স্ক্রিনের নিচ থেকে আরেকটু ওপরে ওঠানো হলো */
+    margin-bottom: 15px; 
 }
 
 .chat-input-wrapper {
@@ -440,10 +534,37 @@ body.atlas-theme {
 
 
 
+/* ==== Copy Code Button ==== */
+.copy-btn {
+    background: rgba(51, 204, 255, 0.1);
+    border: 1px solid rgba(51, 204, 255, 0.3);
+    color: #33ccff;
+    border-radius: 4px;
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
 
+.copy-btn:hover {
+    background: #33ccff;
+    color: #010308;
+    box-shadow: 0 0 10px rgba(51, 204, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* কপি হয়ে গেলে সবুজ গ্লো হবে */
+.copy-btn.copied {
+    background: #33ff99;
+    border-color: #33ff99;
+    color: #010308;
+    box-shadow: 0 0 15px rgba(51, 255, 153, 0.6);
+}
 
 /* =========================================
-   9. MOBILE RESPONSIVENESS
+   10. MOBILE RESPONSIVENESS
    ========================================= */
 @media (max-width: 768px) {
     body.atlas-theme {
@@ -503,5 +624,3 @@ body.atlas-theme {
     .chat-input-wrapper { flex-direction: column; }
     .send-btn { width: 100%; padding: 10px; }
 }
-
-

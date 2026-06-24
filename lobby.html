@@ -59,20 +59,37 @@
         </main>
     </div>
 
+    <div id="rulesModal" class="scifi-modal-overlay">
+        <div class="scifi-modal-content">
+            <button id="closeRulesBtn" class="close-btn">&times;</button>
+            <h2 class="panel-title" style="font-size: 1.5rem; text-align: center; border:none; margin-bottom: 10px;">SYSTEM MANUAL: HOW TO PLAY</h2>
+            <div class="rules-text">
+                <p><strong class="text-glow">1. ESTABLISH A NODE (ROOM):</strong><br>Create a new room and share the 6-digit Code with your friends, or enter a Code to join an existing room.</p>
+                <p><strong class="text-glow">2. TRANSMITTER (DRAWER):</strong><br>When it's your turn, a secret word will appear on your screen. Sketch it on the holographic board! (Writing letters or numbers is strictly prohibited).</p>
+                <p><strong class="text-glow">3. RECEIVER (GUESSER):</strong><br>Watch the live transmission of the drawing. Type your guess in the console box below. The faster you guess correctly, the more points you earn!</p>
+                <p><strong class="text-glow">4. VICTORY:</strong><br>The operator with the highest sync rate (Points) at the end of all rounds wins the game!</p>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/lobby.js"></script>
 
     <script>
         const robot = document.getElementById('draggableRobot');
         const speechBubble = document.getElementById('robotSpeech');
         const speechText = document.getElementById('speechText');
-        let isDragging = false, startX, startY, offsetX, offsetY, isRulesShowing = false;
+        const rulesModal = document.getElementById('rulesModal');
+        const closeBtn = document.getElementById('closeRulesBtn');
+        let isDragging = false, startX, startY, offsetX, offsetY;
 
+        // শুরুতে রোবটের ওয়েলকাম মেসেজ
         setTimeout(() => {
-            speechText.innerHTML = '<div class="typewriter-text">Hi, I am Artie! 🎨 Ready to draw?</div>';
+            speechText.innerHTML = '<div class="typewriter-text">Hi, I am Artie! 🎨 Click me for rules.</div>';
             speechBubble.classList.add('active');
-            setTimeout(() => { if (!isRulesShowing) speechBubble.classList.remove('active'); }, 5000);
+            setTimeout(() => { speechBubble.classList.remove('active'); }, 5000);
         }, 1000);
 
+        // রোবট ড্র্যাগ করার লজিক
         if (robot) {
             robot.addEventListener('mousedown', (e) => {
                 isDragging = true; startX = e.clientX; startY = e.clientY;
@@ -88,21 +105,24 @@
             });
             document.addEventListener('mouseup', (e) => {
                 if (!isDragging) return; isDragging = false; robot.style.cursor = 'grab';
-                if (Math.abs(e.clientX - startX) < 5 && Math.abs(e.clientY - startY) < 5) toggleRules();
+                // যদি শুধু ক্লিক করা হয় (ড্র্যাগ না করে), তবে রুলস পপআপ ওপেন হবে
+                if (Math.abs(e.clientX - startX) < 5 && Math.abs(e.clientY - startY) < 5) {
+                    rulesModal.classList.add('active');
+                }
             });
         }
 
-        function toggleRules() {
-            if (speechBubble.classList.contains('active') && isRulesShowing) {
-                speechBubble.classList.remove('active'); isRulesShowing = false;
-            } else {
-                speechBubble.classList.remove('active'); 
-                setTimeout(() => {
-                    speechText.innerHTML = '<div class="typewriter-text" style="animation: typing 2s steps(50, end);">RULES: 1. Draw Fast 2. Guess Smart 3. Win! 🏆</div>';
-                    speechBubble.classList.add('active'); isRulesShowing = true;
-                }, 100); 
+        // পপআপ বন্ধ করার লজিক
+        closeBtn.addEventListener('click', () => {
+            rulesModal.classList.remove('active');
+        });
+
+        // পপআপের বাইরে ক্লিক করলে বন্ধ হয়ে যাবে
+        rulesModal.addEventListener('click', (e) => {
+            if (e.target === rulesModal) {
+                rulesModal.classList.remove('active');
             }
-        }
+        });
     </script>
 </body>
 </html>
