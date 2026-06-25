@@ -1,18 +1,22 @@
-import { db } from "./firebase.js";
+import { db, rtdb } from "./firebase.js";
 
 import {
     doc,
-    collection,
-    addDoc,
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+import {
+    ref,
+    push,
+    onChildAdded
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
 const roomCode = localStorage.getItem("roomCode");
 const playerName = localStorage.getItem("playerName");
 
 const roomRef = doc(db, "rooms", roomCode);
-const strokeRef = collection(roomRef, "strokes");
-
+const strokeRef =
+    ref(rtdb, `rooms/${roomCode}/strokes`);
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -78,7 +82,7 @@ async function sendStroke(data) {
     data.sender = playerName;
     data.ts = Date.now();
 
-    await addDoc(strokeRef, data);
+    await push(strokeRef, data);
 }
 
 canvas.addEventListener("mousedown", (e) => {
@@ -126,30 +130,39 @@ canvas.addEventListener("mouseleave", () => {
     drawing = false;
 });
 
-onSnapshot(strokeRef, (snapshot) => {
+onChildAdded(strokeRef, (snapshot) => {
 
-    snapshot.docChanges().forEach((change) => {
+    const data = snapshot.val();
 
-        const data = change.doc.data();
-        // ignore our own strokes (we already render them locally)
-        if (data.sender === playerName) return;
+    if (!data) return;
 
-        if (change.type !== 'added') return;
+    if (data.sender === playerName)
+        return;
 
-        if (data.type === "start") {
+    if (data.type === "start") {
+
+        lastX = data.x;
+        lastY = data.y;
+
+    } else if (data.type === "move") {
+
+        if (
+            lastX === null ||
+            lastY === null
+        ) {
             lastX = data.x;
             lastY = data.y;
-        } else if (data.type === "move") {
-            if (lastX === null || lastY === null) {
-                lastX = data.x;
-                lastY = data.y;
-                return;
-            }
-
-            drawLine(lastX, lastY, data.x, data.y);
-
-            lastX = data.x;
-            lastY = data.y;
+            return;
         }
-    });
+
+        drawLine(
+            lastX,
+            lastY,
+            data.x,
+            data.y
+        );
+
+        lastX = data.x;
+        lastY = data.y;
+    }
 });
