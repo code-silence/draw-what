@@ -1,12 +1,18 @@
-import { db } from "./firebase.js";
+import { db, rtdb } from "./firebase.js";
 import { words } from "./words.js";
+import {
+    ref,
+    remove
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
 
 import {
     doc,
     onSnapshot,
     updateDoc,
     getDoc,
-    arrayUnion
+    arrayUnion,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
@@ -20,6 +26,8 @@ if (!roomCode || !playerName) {
 }
 
 const roomRef = doc(db, "rooms", roomCode);
+const strokesRef =
+    ref(rtdb, `rooms/${roomCode}`);
 
 
 // ===== UI ELEMENTS =====
@@ -34,6 +42,7 @@ const wordBox = document.getElementById("wordBox");
 const correctAnswer = document.getElementById("correctAnswer");
 const guessResults = document.getElementById("guessResults");
 const nextRoundBtn = document.getElementById("nextRoundBtn");
+const endGameBtn = document.getElementById("endGameBtn");
 const guessBtn = document.getElementById("guessBtn");
 const guessInput = document.getElementById("guessInput");
 
@@ -75,6 +84,7 @@ onSnapshot(roomRef, (snap) => {
     if (data.state === "drawing") {
 
         resultSection.style.display = "none";
+        endGameBtn.style.display = "none";
         lobbySection.style.display = "none";
         gameSection.style.display = "block";
 
@@ -129,7 +139,7 @@ onSnapshot(roomRef, (snap) => {
 
         clearInterval(timerInterval);
         timerInterval = null;
-
+        endGameBtn.style.display = "none";
         lobbySection.style.display = "none";
         gameSection.style.display = "none";
         resultSection.style.display = "block";
@@ -161,13 +171,20 @@ onSnapshot(roomRef, (snap) => {
         guessResults.appendChild(p);
 
         nextRoundBtn.textContent = "Play Again";
-        nextRoundBtn.style.display = "block";
+        if (data.host === playerName) {
+            endGameBtn.style.display = "block";
+        } else {
+            endGameBtn.style.display = "none";
+        }
+        nextRoundBtn.style.display =
+            isHost ? "block" : "none";
 
     } else {
 
         lobbySection.style.display = "block";
         gameSection.style.display = "none";
         resultSection.style.display = "none";
+        endGameBtn.style.display = "none";
 
         status.textContent = "Waiting for game...";
     }
@@ -291,4 +308,34 @@ guessBtn.addEventListener("click", async () => {
     guessInput.disabled = true;
     guessBtn.disabled = true;
     guessInput.value = "";
+});
+
+// ===== END GAME =====
+endGameBtn.addEventListener("click", async () => {
+
+    const confirmEnd = confirm(
+        "End game and delete room?"
+    );
+
+    if (!confirmEnd) return;
+
+    try {
+
+        // delete RTDB room
+        await remove(strokesRef);
+
+        // delete Firestore room
+        await deleteDoc(roomRef);
+
+        localStorage.removeItem("roomCode");
+
+        location.href = "index.html";
+
+    } catch (err) {
+
+        console.error(err);
+        alert("Failed to delete room.");
+
+    }
+
 });
