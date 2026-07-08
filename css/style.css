@@ -387,7 +387,6 @@ body.atlas-theme {
     border-bottom: 1px dashed rgba(255,255,255,0.1);
 }
 
-/* ==== Canvas Section ==== */
 .canvas-status {
     display: flex;
     justify-content: space-between;
@@ -402,7 +401,6 @@ body.atlas-theme {
     z-index: 11;
 }
 
-/* Secret Word Box (Drawer Only) */
 .secret-word-box {
     font-family: 'Jost', sans-serif;
     font-size: 1.1rem;
@@ -440,7 +438,6 @@ body.atlas-theme {
     background: #02040a; 
 }
 
-/* অ্যানিমেটেড বর্ডার */
 .canvas-wrapper::before {
     content: '';
     position: absolute;
@@ -451,7 +448,6 @@ body.atlas-theme {
     z-index: -1;
 }
 
-/* সলিড সাদা ক্যানভাস */
 .canvas-wrapper::after {
     content: '';
     position: absolute;
@@ -477,7 +473,6 @@ body.atlas-theme {
     position: relative;
 }
 
-/* ==== Guess Input Panel (Bottom Bar) ==== */
 .guess-panel {
     flex-direction: row;
     padding: 15px;
@@ -532,9 +527,6 @@ body.atlas-theme {
     box-shadow: 0 0 15px rgba(51, 204, 255, 0.4);
 }
 
-
-
-/* ==== Copy Code Button ==== */
 .copy-btn {
     background: rgba(51, 204, 255, 0.1);
     border: 1px solid rgba(51, 204, 255, 0.3);
@@ -555,7 +547,6 @@ body.atlas-theme {
     transform: scale(1.1);
 }
 
-/* কপি হয়ে গেলে সবুজ গ্লো হবে */
 .copy-btn.copied {
     background: #33ff99;
     border-color: #33ff99;
@@ -563,8 +554,273 @@ body.atlas-theme {
     box-shadow: 0 0 15px rgba(51, 255, 153, 0.6);
 }
 
+
 /* =========================================
-   10. MOBILE RESPONSIVENESS
+   10. GALAXY ARCADE (GAME HUB)
+   ========================================= */
+.arcade-layout {
+    justify-content: flex-start;
+    overflow: hidden !important;
+}
+
+.arcade-main {
+    width: 100%;
+    margin-top: 50px;
+    padding-bottom: 50px;
+}
+
+.arcade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.game-card {
+    background: rgba(1, 3, 8, 0.6);
+    border: 1px solid rgba(51, 204, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.active-game:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: #33ccff;
+    box-shadow: 0 15px 30px rgba(51, 204, 255, 0.2), inset 0 0 20px rgba(51, 204, 255, 0.1);
+}
+
+.card-image {
+    height: 200px;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgba(51, 204, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-image img {
+    width: 100px;
+    height: 100px;
+    filter: drop-shadow(0 0 10px rgba(51, 204, 255, 0.5));
+    transition: transform 0.4s ease;
+}
+
+.active-game:hover .card-image img {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.card-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 200px;
+}
+
+.game-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.game-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+.locked-game {
+    background: rgba(1, 3, 8, 0.3);
+    border-style: dashed;
+}
+
+
+/* =========================================
+   11. THREE BUGS ZERO FIX - GLASSY UI
+   ========================================= */
+
+html, body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+.glassy-header {
+    background: rgba(1, 3, 8, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 15px 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(51, 204, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.glowing-logo {
+    text-shadow: 0 0 10px rgba(51, 204, 255, 0.6), 0 0 20px rgba(51, 204, 255, 0.3);
+    letter-spacing: 5px;
+    font-size: 1.5rem;
+}
+
+.auth-group { display: flex; gap: 15px; align-items: center; }
+.auth-btn, .auth-btn-primary { padding: 8px 20px; font-size: 0.85rem; border-radius: 6px; }
+
+.hero-text-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.glitch-title {
+    font-size: 3.5rem;
+    line-height: 1.1;
+    margin-bottom: 15px;
+    animation: textPulse 3s infinite alternate;
+}
+
+@keyframes textPulse {
+    0% { transform: scale(1); text-shadow: 0 0 15px rgba(51,204,255,0.5); }
+    100% { transform: scale(1.02); text-shadow: 0 0 25px rgba(51,204,255,0.8); }
+}
+
+.typing-container { display: inline-block; }
+
+.cyber-typing-text {
+    color: #33ff99;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 3px;
+    font-size: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid #33ff99;
+    animation: typingEffect 3s steps(30, end) infinite alternate, blinkCaret 0.75s step-end infinite;
+}
+
+@keyframes typingEffect { from { width: 0; } to { width: 100%; } }
+@keyframes blinkCaret { from, to { border-color: transparent; } 50% { border-color: #33ff99; } }
+
+.arcade-center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.glassy-card {
+    background: rgba(10, 15, 30, 0.4) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(51, 204, 255, 0.2) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(51, 204, 255, 0.1) !important;
+    border-radius: 16px !important;
+    max-width: 300px !important; 
+    width: 100%;
+}
+
+.compact-image {
+    height: 140px !important; 
+    background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.compact-image img {
+    width: 70px !important; 
+    height: 70px !important;
+    filter: drop-shadow(0 0 15px rgba(51, 204, 255, 0.8)) !important;
+}
+
+.compact-content {
+    padding: 20px !important;
+    height: auto !important;
+}
+
+.floating-card {
+    animation: floatInSpace 6s ease-in-out infinite;
+}
+
+@keyframes floatInSpace {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(51,204,255,0.2); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-card:hover {
+    animation-play-state: paused;
+    transform: translateY(-15px) scale(1.05);
+    border-color: #33ff99 !important;
+}
+
+.floating-card:hover .compact-image img {
+    transform: scale(1.15) rotate(-5deg);
+    filter: drop-shadow(0 0 15px #33ff99) !important;
+}
+
+.play-btn-modern {
+    width: 100%; 
+    justify-content: center; 
+    margin-top: 15px; 
+    border-radius: 8px;
+    padding: 12px;
+    background: linear-gradient(135deg, #33ccff, #006699);
+    transition: 0.3s;
+}
+
+.play-btn-modern:hover {
+    background: linear-gradient(135deg, #33ff99, #009966);
+    box-shadow: 0 0 20px rgba(51, 255, 153, 0.6);
+}
+
+
+/* =========================================
+   12. ANIMATED HEADER BORDER (FAIL-PROOF)
+   ========================================= */
+
+.animated-header-wrapper {
+    padding: 2px; 
+    border-radius: 16px;
+    margin-bottom: 40px;
+    
+    
+    background: linear-gradient(90deg, #33ccff, #060b14, #33ff99, #060b14, #33ccff);
+    background-size: 300% 300%;
+    animation: glowBorder 4s linear infinite;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(51, 204, 255, 0.2);
+}
+
+@keyframes glowBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.glassy-header-content {
+    background: #060b14; 
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    width: 100%;
+}
+
+
+@media (max-width: 768px) {
+    .glassy-header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* =========================================
+   13. MOBILE RESPONSIVENESS (Always at the end)
    ========================================= */
 @media (max-width: 768px) {
     body.atlas-theme {
@@ -623,4 +879,10 @@ body.atlas-theme {
     .guess-panel { flex-direction: column; padding: 10px; }
     .chat-input-wrapper { flex-direction: column; }
     .send-btn { width: 100%; padding: 10px; }
+    
+    /* Mobile fix for header */
+    .glassy-header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
