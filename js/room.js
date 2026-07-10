@@ -320,7 +320,7 @@ endGameBtn.addEventListener("click", async () => {
     if (!confirmEnd) return;
 
     try {
-
+        
         // delete RTDB room
         await remove(strokesRef);
 
